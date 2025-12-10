@@ -159,7 +159,7 @@ def count_heatmap(df, row_col, col_col, title, z_title="Talyp sany"):
 # -----------------------------
 # READ CSV FROM FILE
 # -----------------------------
-CSV_PATH = "data1.csv"   # your file
+CSV_PATH = "data1.csv"  
 df = pd.read_csv(CSV_PATH)
 
 for col in ["Okuw mekdebi", "Dersi", "Okuwdan soňky iş ýeri", "Ýagdaýy (galan / giden)", "Işleýän ýurdy"]:
@@ -370,7 +370,6 @@ with tab_olymp:
 # TAB 3: TRAVEL & EXPENSES
 # -----------------------------
 with tab_travel:
-
 
     # expenses by school
     exp_by_school = (
@@ -705,9 +704,6 @@ with tab_brain:
     # st.plotly_chart(fig_status_flow_2, use_container_width=True)
 
 
-
-
-
     # status by school
     status_by_school = (
         f.groupby(["Okuw mekdebi", "Ýagdaýy (galan / giden)"])["Talyp ady, familiýasy"]
@@ -751,7 +747,7 @@ with tab_brain:
 
     st.plotly_chart(fig_scatter, use_container_width=True)
 
-# ADVANCED
+# More Analytics 
 
     fig = px.box(
     f,
@@ -775,8 +771,6 @@ with tab_brain:
     fig.update_yaxes(range=[0, f["Daşary ýurt saparlarynyň sany"].max() + 5])
 
     st.plotly_chart(fig, use_container_width=True)
-
-
 
     # fig = px.violin(
     # f,
@@ -859,13 +853,10 @@ with tab_brain:
     st.plotly_chart(fig_year_status, use_container_width=True)
 
 
-
 # -----------------------------
 # TAB 6: ADVANCED ANALYTICS
 # -----------------------------
 with tab_advanced:
- 
-
     # correlation heatmap (numeric columns)
     st.markdown("Korelýasiýa matrisasy (sanly sütunlar boýunça)")
     num_for_corr = f[num_cols + ["Okuw dowamlylygy"]] if "Okuw dowamlylygy" in f.columns else f[num_cols]
@@ -897,9 +888,6 @@ with tab_advanced:
         model = LogisticRegression()
         model.fit(X, y)
 
-        # show coefficients
-
-
         st.markdown("Talyp profiline laýyklykda modeliň çaklamasyny görmek üçin baha giriziň:")
         c1, c2, c3 = st.columns(3)
         trips_in = c1.number_input("Daşary ýurt saparlarynyň sany", min_value=0, value=int(f["Daşary ýurt saparlarynyň sany"].median()))
@@ -928,11 +916,9 @@ with tab_advanced:
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(Xc)
 
-        k = 3  # 3 clusters
+        k = 3
         kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
         data_cluster["Cluster"] = kmeans.fit_predict(X_scaled)
-
-      
 
         st.write("Her klasteriň umumy statistikalary:")
         st.dataframe(
@@ -955,7 +941,6 @@ with tab_advanced:
     kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
     data_cluster["Cluster"] = kmeans.fit_predict(X_scaled)
 
-    # 👇 add tiny random jitter only for plotting (doesn't affect clustering)
     rng = np.random.default_rng(42)
     data_cluster["Daşary ýurt saparlarynyň sany"] = data_cluster["Daşary ýurt saparlarynyň sany"] + rng.uniform(-0.15, 0.15, len(data_cluster))
     data_cluster["Takmynan çykdajy möçberi (USD/manat)"]  = data_cluster["Takmynan çykdajy möçberi (USD/manat)"] + rng.uniform(-300, 300, len(data_cluster))
@@ -987,7 +972,7 @@ with tab_advanced:
     kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
     data_cluster["Cluster"] = kmeans.fit_predict(X_scaled)
 
-    # 👇 aggregate: how many students per (trips, cost, cluster)
+    #  how many students per (trips, cost, cluster)
     agg = (
         data_cluster
         .groupby(cluster_features + ["Cluster"])
